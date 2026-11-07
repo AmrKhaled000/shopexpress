@@ -1,0 +1,33 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 800 1000" role="img" aria-label="ShopExpress product illustration">
+  <defs>
+    <radialGradient id="glow" cx="50%" cy="50%" r="50%">
+      <stop offset="0" stop-color="#F7D9A8" stop-opacity="0.85"/>
+      <stop offset="1" stop-color="#F7D9A8" stop-opacity="0"/>
+    </radialGradient>
+    <filter id="noise">
+      <feTurbulence type="fractalNoise" baseFrequency="0.85" numOctaves="3" stitchTiles="stitch"/>
+      <feColorMatrix type="saturate" values="0"/>
+    </filter>
+  </defs>
+  <rect width="800" height="1000" fill="#E8D7D0"/>
+  <rect width="800" height="1000" fill="#FFFFFF" opacity="0.16"/>
+  
+      <ellipse cx="400" cy="760" rx="210" ry="24" fill="#39261F" opacity="0.12"/>
+      <path d="M218 470 L570 448 L594 674 L242 696 Z" fill="#B07D6D"/>
+      <path d="M218 470 L570 448 L576 512 L225 534 Z" fill="#C18D7C"/>
+      <path d="M230 574 L584 552 L588 612 L234 634 Z" fill="#9C6B5B" opacity="0.65"/>
+      <path d="M242 696 L594 674 L602 728 L250 750 Z" fill="#C89A88"/>
+      <g stroke="#E8D7D0" stroke-width="3" opacity="0.5">
+        <path d="M272 452 L284 678"/><path d="M330 449 L342 675"/><path d="M388 445 L400 671"/>
+        <path d="M446 442 L458 668"/><path d="M504 438 L516 664"/>
+      </g>
+      <g stroke="#7E5143" stroke-width="3" stroke-linecap="round">
+        <path d="M262 748 L258 782"/><path d="M282 747 L278 781"/><path d="M302 746 L298 780"/>
+        <path d="M322 745 L318 779"/><path d="M342 744 L338 778"/><path d="M362 743 L358 777"/>
+        <path d="M382 742 L378 776"/><path d="M402 741 L398 775"/><path d="M422 740 L418 774"/>
+        <path d="M442 739 L438 773"/><path d="M462 738 L458 772"/><path d="M482 737 L478 771"/>
+        <path d="M502 736 L498 770"/><path d="M522 735 L518 769"/><path d="M542 734 L538 768"/>
+      </g>
+      <path d="M560 550 C600 560 610 620 580 650" fill="none" stroke="#8E5C4C" stroke-width="5" opacity="0.45"/>
+  <rect width="800" height="1000" filter="url(#noise)" opacity="0.055" style="mix-blend-mode:multiply"/>
+</svg>

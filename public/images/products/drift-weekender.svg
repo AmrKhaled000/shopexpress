@@ -1,0 +1,27 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 800 1000" role="img" aria-label="ShopExpress product illustration">
+  <defs>
+    <radialGradient id="glow" cx="50%" cy="50%" r="50%">
+      <stop offset="0" stop-color="#F7D9A8" stop-opacity="0.85"/>
+      <stop offset="1" stop-color="#F7D9A8" stop-opacity="0"/>
+    </radialGradient>
+    <filter id="noise">
+      <feTurbulence type="fractalNoise" baseFrequency="0.85" numOctaves="3" stitchTiles="stitch"/>
+      <feColorMatrix type="saturate" values="0"/>
+    </filter>
+  </defs>
+  <rect width="800" height="1000" fill="#DAD8C8"/>
+  <rect width="800" height="1000" fill="#FFFFFF" opacity="0.16"/>
+  
+      <ellipse cx="400" cy="748" rx="200" ry="24" fill="#2A2B20" opacity="0.15"/>
+      <path d="M238 484 C238 456 260 444 290 444 L510 444 C540 444 562 456 562 484 L592 672 C596 706 576 728 540 728 L260 728 C224 728 204 706 208 672 Z" fill="#6B7257"/>
+      <path d="M238 484 C238 456 260 444 290 444 L510 444 C540 444 562 456 562 484 L566 510 L234 510 Z" fill="#7D8569"/>
+      <path d="M300 444 C300 388 500 388 500 444" fill="none" stroke="#4E5540" stroke-width="20" stroke-linecap="round"/>
+      <path d="M338 444 C338 410 462 410 462 444" fill="none" stroke="#B9BDA9" stroke-width="6" stroke-linecap="round" opacity="0.5"/>
+      <path d="M240 512 L560 512" stroke="#4E5540" stroke-width="4" stroke-dasharray="8 7" opacity="0.55"/>
+      <rect x="386" y="548" width="80" height="74" rx="12" fill="#565D45"/>
+      <rect x="396" y="560" width="60" height="10" rx="5" fill="#DAD8C8" opacity="0.5"/>
+      <path d="M566 540 C636 566 632 626 596 662" fill="none" stroke="#4E5540" stroke-width="12" stroke-linecap="round"/>
+      <circle cx="598" cy="664" r="12" fill="#C25735"/>
+      <rect x="226" y="552" width="74" height="112" rx="28" fill="#7D8569"/>
+  <rect width="800" height="1000" filter="url(#noise)" opacity="0.055" style="mix-blend-mode:multiply"/>
+</svg>

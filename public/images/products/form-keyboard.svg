@@ -1,0 +1,25 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 800 1000" role="img" aria-label="ShopExpress product illustration">
+  <defs>
+    <radialGradient id="glow" cx="50%" cy="50%" r="50%">
+      <stop offset="0" stop-color="#F7D9A8" stop-opacity="0.85"/>
+      <stop offset="1" stop-color="#F7D9A8" stop-opacity="0"/>
+    </radialGradient>
+    <filter id="noise">
+      <feTurbulence type="fractalNoise" baseFrequency="0.85" numOctaves="3" stitchTiles="stitch"/>
+      <feColorMatrix type="saturate" values="0"/>
+    </filter>
+  </defs>
+  <rect width="800" height="1000" fill="#E7E1D5"/>
+  <rect width="800" height="1000" fill="#FFFFFF" opacity="0.16"/>
+  
+      <ellipse cx="400" cy="715" rx="235" ry="26" fill="#2A241D" opacity="0.16"/>
+      <g transform="rotate(-5 400 560)">
+        <rect x="188" y="436" width="424" height="252" rx="28" fill="#2C2A25"/>
+        <rect x="202" y="450" width="396" height="224" rx="20" fill="#3A372F"/>
+        <rect x="242" y="478" width="26" height="27" rx="6" fill="#DED8CB"/><rect x="275" y="478" width="26" height="27" rx="6" fill="#CFC7B7"/><rect x="308" y="478" width="26" height="27" rx="6" fill="#E8E2D6"/><rect x="341" y="478" width="26" height="27" rx="6" fill="#DED8CB"/><rect x="374" y="478" width="26" height="27" rx="6" fill="#CFC7B7"/><rect x="407" y="478" width="26" height="27" rx="6" fill="#E8E2D6"/><rect x="440" y="478" width="26" height="27" rx="6" fill="#DED8CB"/><rect x="473" y="478" width="26" height="27" rx="6" fill="#CFC7B7"/><rect x="506" y="478" width="26" height="27" rx="6" fill="#E8E2D6"/><rect x="539" y="478" width="26" height="27" rx="6" fill="#DED8CB"/><rect x="572" y="478" width="26" height="27" rx="6" fill="#CFC7B7"/><rect x="226" y="518" width="26" height="27" rx="6" fill="#CFC7B7"/><rect x="259" y="518" width="26" height="27" rx="6" fill="#E8E2D6"/><rect x="292" y="518" width="26" height="27" rx="6" fill="#DED8CB"/><rect x="325" y="518" width="26" height="27" rx="6" fill="#CFC7B7"/><rect x="358" y="518" width="26" height="27" rx="6" fill="#E8E2D6"/><rect x="391" y="518" width="26" height="27" rx="6" fill="#DED8CB"/><rect x="424" y="518" width="26" height="27" rx="6" fill="#CFC7B7"/><rect x="457" y="518" width="26" height="27" rx="6" fill="#E8E2D6"/><rect x="490" y="518" width="26" height="27" rx="6" fill="#DED8CB"/><rect x="523" y="518" width="26" height="27" rx="6" fill="#CFC7B7"/><rect x="556" y="518" width="26" height="27" rx="6" fill="#E8E2D6"/><rect x="226" y="558" width="26" height="27" rx="6" fill="#E8E2D6"/><rect x="259" y="558" width="26" height="27" rx="6" fill="#DED8CB"/><rect x="292" y="558" width="26" height="27" rx="6" fill="#CFC7B7"/><rect x="325" y="558" width="26" height="27" rx="6" fill="#E8E2D6"/><rect x="358" y="558" width="26" height="27" rx="6" fill="#DED8CB"/><rect x="391" y="558" width="26" height="27" rx="6" fill="#CFC7B7"/><rect x="424" y="558" width="26" height="27" rx="6" fill="#E8E2D6"/><rect x="457" y="558" width="26" height="27" rx="6" fill="#DED8CB"/><rect x="490" y="558" width="26" height="27" rx="6" fill="#CFC7B7"/><rect x="523" y="558" width="26" height="27" rx="6" fill="#E8E2D6"/><rect x="556" y="558" width="26" height="27" rx="6" fill="#DED8CB"/><rect x="226" y="598" width="50" height="27" rx="6" fill="#DED8CB"/><rect x="292" y="598" width="26" height="27" rx="6" fill="#E8E2D6"/><rect x="325" y="598" width="26" height="27" rx="6" fill="#DED8CB"/><rect x="358" y="598" width="26" height="27" rx="6" fill="#CFC7B7"/><rect x="391" y="598" width="26" height="27" rx="6" fill="#E8E2D6"/><rect x="424" y="598" width="26" height="27" rx="6" fill="#DED8CB"/><rect x="457" y="598" width="26" height="27" rx="6" fill="#CFC7B7"/><rect x="490" y="598" width="26" height="27" rx="6" fill="#E8E2D6"/><rect x="523" y="598" width="26" height="27" rx="6" fill="#DED8CB"/><rect x="556" y="598" width="26" height="27" rx="6" fill="#C25735" stroke="#8E3A20" stroke-width="2"/>
+        <rect x="218" y="636" width="96" height="27" rx="6" fill="#4B473E"/>
+        <rect x="330" y="636" width="206" height="27" rx="6" fill="#4B473E"/>
+      </g>
+      <path d="M640 690 L706 742" stroke="#2C2A25" stroke-width="5" stroke-linecap="round" opacity="0.25"/>
+  <rect width="800" height="1000" filter="url(#noise)" opacity="0.055" style="mix-blend-mode:multiply"/>
+</svg>

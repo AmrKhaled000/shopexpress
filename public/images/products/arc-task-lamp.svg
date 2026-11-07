@@ -1,0 +1,26 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 800 1000" role="img" aria-label="ShopExpress product illustration">
+  <defs>
+    <radialGradient id="glow" cx="50%" cy="50%" r="50%">
+      <stop offset="0" stop-color="#F7D9A8" stop-opacity="0.85"/>
+      <stop offset="1" stop-color="#F7D9A8" stop-opacity="0"/>
+    </radialGradient>
+    <filter id="noise">
+      <feTurbulence type="fractalNoise" baseFrequency="0.85" numOctaves="3" stitchTiles="stitch"/>
+      <feColorMatrix type="saturate" values="0"/>
+    </filter>
+  </defs>
+  <rect width="800" height="1000" fill="#EDE3D4"/>
+  <rect width="800" height="1000" fill="#FFFFFF" opacity="0.16"/>
+  
+      <ellipse cx="520" cy="380" rx="230" ry="220" fill="url(#glow)" opacity="0.8"/>
+      <ellipse cx="395" cy="748" rx="150" ry="20" fill="#2A241D" opacity="0.16"/>
+      <path d="M392 724 C392 560 420 452 510 416" fill="none" stroke="#2A241D" stroke-width="13" stroke-linecap="round"/>
+      <path d="M470 418 A86 86 0 0 1 616 430 L520 466 Z" fill="#C25735"/>
+      <path d="M470 418 A86 86 0 0 1 616 430" fill="none" stroke="#8E3A20" stroke-width="3" opacity="0.5"/>
+      <ellipse cx="543" cy="444" rx="43" ry="15" fill="#F7D9A8" opacity="0.9"/>
+      <ellipse cx="392" cy="724" rx="96" ry="20" fill="#B04B2C"/>
+      <ellipse cx="392" cy="718" rx="96" ry="17" fill="#D06A44"/>
+      <path d="M520 466 L470 720" stroke="#F7D9A8" stroke-width="1.5" opacity="0.25"/>
+      <circle cx="392" cy="724" r="5" fill="#2A241D" opacity="0.4"/>
+  <rect width="800" height="1000" filter="url(#noise)" opacity="0.055" style="mix-blend-mode:multiply"/>
+</svg>

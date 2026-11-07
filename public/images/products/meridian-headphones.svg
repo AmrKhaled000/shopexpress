@@ -1,0 +1,27 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 800 1000" role="img" aria-label="ShopExpress product illustration">
+  <defs>
+    <radialGradient id="glow" cx="50%" cy="50%" r="50%">
+      <stop offset="0" stop-color="#F7D9A8" stop-opacity="0.85"/>
+      <stop offset="1" stop-color="#F7D9A8" stop-opacity="0"/>
+    </radialGradient>
+    <filter id="noise">
+      <feTurbulence type="fractalNoise" baseFrequency="0.85" numOctaves="3" stitchTiles="stitch"/>
+      <feColorMatrix type="saturate" values="0"/>
+    </filter>
+  </defs>
+  <rect width="800" height="1000" fill="#DDE1D6"/>
+  <rect width="800" height="1000" fill="#FFFFFF" opacity="0.16"/>
+  
+      <ellipse cx="400" cy="770" rx="160" ry="22" fill="#22261F" opacity="0.14"/>
+      <path d="M268 590 C268 340 532 340 532 590" fill="none" stroke="#23281F" stroke-width="42" stroke-linecap="round"/>
+      <path d="M282 570 C282 368 518 368 518 570" fill="none" stroke="#7B8373" stroke-width="6" stroke-linecap="round" opacity="0.55"/>
+      <rect x="226" y="548" width="98" height="192" rx="47" fill="#23281F"/>
+      <rect x="248" y="572" width="54" height="144" rx="27" fill="#4B5345"/>
+      <rect x="476" y="548" width="98" height="192" rx="47" fill="#23281F"/>
+      <rect x="498" y="572" width="54" height="144" rx="27" fill="#4B5345"/>
+      <rect x="262" y="600" width="10" height="90" rx="5" fill="#D9DED2" opacity="0.28"/>
+      <rect x="512" y="600" width="10" height="90" rx="5" fill="#D9DED2" opacity="0.28"/>
+      <circle cx="275" cy="644" r="3" fill="#C25735"/>
+      <circle cx="525" cy="644" r="3" fill="#C25735"/>
+  <rect width="800" height="1000" filter="url(#noise)" opacity="0.055" style="mix-blend-mode:multiply"/>
+</svg>
