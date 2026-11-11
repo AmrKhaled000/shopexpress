@@ -2697,3 +2697,45 @@
     max-width: none;
   }
 }
+
+/* --------------------------------------------------------------------------
+   Product gallery
+   -------------------------------------------------------------------------- */
+.product-gallery {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+  margin-top: 0.75rem;
+}
+
+.product-gallery__thumb {
+  overflow: hidden;
+  padding: 0;
+  border: 1px solid var(--line-strong);
+  border-radius: var(--radius-sm);
+  background: var(--surface);
+  cursor: pointer;
+  transition: border-color var(--fast), transform var(--fast), box-shadow var(--fast);
+}
+
+.product-gallery__thumb:hover {
+  transform: translateY(-2px);
+  box-shadow: var(--shadow-xs);
+}
+
+.product-gallery__thumb:focus-visible {
+  outline: 2px solid var(--accent);
+  outline-offset: 2px;
+}
+
+.product-gallery__thumb.is-active {
+  border-color: var(--accent);
+  box-shadow: 0 0 0 2px var(--accent-soft);
+}
+
+.product-gallery__thumb img {
+  display: block;
+  width: 76px;
+  aspect-ratio: 4 / 5;
+  object-fit: cover;
+}

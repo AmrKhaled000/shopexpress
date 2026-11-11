@@ -16,12 +16,23 @@
     <article class="product-detail">
         <div class="product-detail__media">
             <figure class="product-detail__figure reveal">
-                <img src="<%= product.imageUrl %>" alt="<%= product.title %>" width="800" height="1000" data-product-image>
+                <img src="<%= product.imageUrl %>" alt="<%= product.title %>" width="800" height="1000" data-product-image data-gallery-main>
                 <figcaption class="product-detail__caption">
                     <span>ShopExpress / The collection</span>
                     <span>Object no. <%= product._id.toString().slice(-3).toUpperCase() %></span>
                 </figcaption>
             </figure>
+
+            <% const galleryImages = (product.images && product.images.length > 0) ? product.images : (product.imageUrl ? [product.imageUrl] : []); %>
+            <% if (galleryImages.length > 1) { %>
+                <div class="product-gallery" role="group" aria-label="Product images">
+                    <% galleryImages.forEach(function (url, index) { %>
+                        <button type="button" class="product-gallery__thumb<%= index === 0 ? ' is-active' : '' %>" data-gallery-thumb="<%= url %>" data-gallery-alt="<%= product.title %> — view <%= index + 1 %>" aria-pressed="<%= index === 0 ? 'true' : 'false' %>">
+                            <img src="<%= url %>" alt="<%= product.title %>, view <%= index + 1 %>" width="96" height="120" loading="lazy" decoding="async" data-product-image>
+                        </button>
+                    <% }); %>
+                </div>
+            <% } %>
 
             <div class="product-assurances" aria-label="Product assurances">
                 <div class="product-assurance">
@@ -62,6 +73,21 @@
                             <span class="select-wrap__icon" aria-hidden="true"><%- icon('chevron-down') %></span>
                         </div>
                     </div>
+                    <% const sizeOptions = Array.isArray(product.sizes) ? product.sizes : []; %>
+                    <% if (sizeOptions.length > 0) { %>
+                        <div class="buy-form__row">
+                            <label for="size">Size</label>
+                            <div class="select-wrap">
+                                <select id="size" name="size" required>
+                                    <option value="" selected disabled>Choose a size</option>
+                                    <% sizeOptions.forEach(function (size) { %>
+                                        <option value="<%= size %>"><%= size %></option>
+                                    <% }); %>
+                                </select>
+                                <span class="select-wrap__icon" aria-hidden="true"><%- icon('chevron-down') %></span>
+                            </div>
+                        </div>
+                    <% } %>
                     <button class="btn btn--lg btn--block" type="submit">
                         <span class="btn__label">Add to cart</span>
                         <%- icon('shopping-bag') %>

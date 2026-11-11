@@ -3,6 +3,8 @@
 const Product = require('../models/product');
 const Order = require('../models/order');
 const { parseCatalogQuery, buildProductQuery, buildProductSort } = require('../util/catalog');
+const snapshotProduct = require('../util/order-product');
+const { sendOrderEmail } = require('../util/mailer');
 
 const OBJECT_ID = /^[a-fA-F0-9]{24}$/;
 
@@ -106,6 +108,7 @@ exports.postCart = (req, res, next) => {
     Number.isInteger(requestedQuantity) && requestedQuantity > 0
       ? Math.min(requestedQuantity, 10)
       : 1;
+  const requestedSize = String(req.body.size || '').trim().slice(0, 20);
 
   if (!OBJECT_ID.test(String(prodId || ''))) {
     req.flash('error', 'That product could not be found.');
@@ -118,9 +121,21 @@ exports.postCart = (req, res, next) => {
         req.flash('error', 'That product could not be found.');
         return null;
       }
-      return req.user.addToCart(product, quantity).then(() => product);
+      const productSizes = Array.isArray(product.sizes) ? product.sizes : [];
+      if (productSizes.length > 0 && !productSizes.includes(requestedSize)) {
+        req.flash('error', 'Choose a size before adding this to your cart.');
+        res.redirect(`/products/${prodId}`);
+        return false; // sentinel: response already sent
+      }
+      const chosenSize = productSizes.length > 0 ? requestedSize : '';
+      return req.user
+        .addToCart(product, quantity, chosenSize)
+        .then(() => product);
     })
     .then(product => {
+      if (product === false) {
+        return undefined;
+      }
       if (product) {
         req.flash('success', `${product.title} added to your cart.`);
         return res.redirect('/cart');
@@ -134,13 +149,15 @@ exports.postCartUpdateQuantity = (req, res, next) => {
   const prodId = req.body.productId;
   const delta = parseInt(req.body.delta, 10);
 
+  const size = String(req.body.size || '').trim().slice(0, 20);
+
   if (!OBJECT_ID.test(String(prodId || '')) || (delta !== 1 && delta !== -1)) {
     req.flash('error', 'We could not update that cart item.');
     return res.redirect('/cart');
   }
 
   req.user
-    .updateCartQuantity(prodId, delta)
+    .updateCartQuantity(prodId, delta, size)
     .then(() => res.redirect('/cart'))
     .catch(next);
 };
@@ -148,13 +165,15 @@ exports.postCartUpdateQuantity = (req, res, next) => {
 exports.postCartDeleteProduct = (req, res, next) => {
   const prodId = req.body.productId;
 
+  const size = String(req.body.size || '').trim().slice(0, 20);
+
   if (!OBJECT_ID.test(String(prodId || ''))) {
     req.flash('error', 'That cart item could not be found.');
     return res.redirect('/cart');
   }
 
   req.user
-    .removeFromCart(prodId)
+    .removeFromCart(prodId, size)
     .then(() => {
       req.flash('success', 'Item removed from your cart.');
       res.redirect('/cart');
@@ -174,7 +193,7 @@ exports.postOrder = async (req, res, next) => {
 
     const products = validItems.map(item => ({
       quantity: item.quantity,
-      product: { ...item.productId._doc }
+      product: snapshotProduct(item.productId, item.size)
     }));
     const total = validItems.reduce(
       (sum, item) => sum + item.productId.price * item.quantity,
@@ -192,6 +211,11 @@ exports.postOrder = async (req, res, next) => {
 
     await order.save();
     await req.user.clearCart();
+    // Fire-and-forget: the order is saved, the confirmation email must
+    // never block checkout or break it if SMTP is down/misconfigured.
+    sendOrderEmail(req.user.email, order).catch(mailError => {
+      console.warn('[mailer] Order confirmation email could not be sent:', mailError.message);
+    });
     req.flash('success', 'Order placed. Thank you for shopping with ShopExpress.');
     return res.redirect('/orders');
   } catch (error) {

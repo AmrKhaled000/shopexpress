@@ -12,7 +12,7 @@ A considered, editorial e-commerce storefront built with Express, EJS, and Mongo
 - **Cart** — persistent per-account cart, quantity steppers, remove actions, and a summary with an order confirmation step.
 - **Accounts** — signup, login, logout, password reset requests, and new-password pages. Sessions are regenerated on login.
 - **Order history** — order cards, lifetime stats, and a clear status label.
-- **Admin studio** — catalog statistics, a responsive product table, search/filter, create and edit forms with live preview, and safe delete confirmation.
+- **Admin studio** — an at-a-glance dashboard (revenue, orders, customers, six-month chart, top objects, recent orders), catalog statistics, a responsive product table, search/filter, create and edit forms with live preview, and safe delete confirmation.
 - **Light and dark appearance** — system-aware initial theme, persisted preference, and a toggle in the header and mobile menu.
 - **Responsive design** — dedicated layouts for desktop, laptop, tablet, and mobile; verified at 390, 768, 1024, and 1440 px.
 - **Accessibility** — skip link, labelled controls, visible focus states, keyboard-friendly navigation, focus containment in the mobile drawer, reduced-motion support, and an accessible native confirmation dialog.
@@ -54,21 +54,14 @@ A considered, editorial e-commerce storefront built with Express, EJS, and Mongo
 ```bash
 npm install
 cp .env.example .env
-# Edit .env: set MONGODB_URI, SESSION_SECRET, and optionally email settings.
+# Edit .env: set MONGODB_URI, SESSION_SECRET, ADMIN_EMAIL, ADMIN_PASSWORD.
 npm run seed
 npm run dev
 ```
 
 Open <http://localhost:3000>.
 
-The seed is idempotent for products and accounts. It creates:
-
-| Role | Email | Password |
-| --- | --- | --- |
-| Admin | `admin@shopexpress.com` | `admin123` |
-| Demo customer | `demo@shopexpress.com` | `demo1234` |
-
-Change these values in `.env` before running the seed if you want different credentials. The admin account is only auto-bootstrapped in development when no admin exists; the seed script is the recommended path.
+The seed is idempotent for products and accounts. It reads `ADMIN_EMAIL` / `ADMIN_PASSWORD` (and optionally `DEMO_EMAIL` / `DEMO_PASSWORD`) from `.env`. **No credentials are stored in this repository** — if you don't set a development password, the seed generates a random one and prints it once in the terminal output when it creates the account. `.env` is git-ignored; never commit it.
 
 ### Scripts
 
@@ -84,11 +77,13 @@ Change these values in `.env` before running the seed if you want different cred
 
 See [`.env.example`](.env.example). The important values:
 
-- `MONGODB_URI` — required in production.
+- `MONGODB_URI` — required in production. Always include the database name in the path (for example `.../shopexpress`); without it the driver falls back to the `test` database.
 - `SESSION_SECRET` — required in production; use a long random string.
 - `ADMIN_EMAIL` / `ADMIN_PASSWORD` — development bootstrap and seed credentials.
 - `DEMO_EMAIL` / `DEMO_PASSWORD` — optional seeded customer.
-- `SENDGRID_API_KEY` — optional. Without it, emails are skipped with a warning and the rest of the app works.
+- `EMAIL_HOST` / `EMAIL_PORT` / `EMAIL_SECURE` / `EMAIL_USER` / `EMAIL_PASS` — optional nodemailer SMTP settings. For Gmail use `smtp.gmail.com` / `465` / `true` with the store's Gmail address and a Google App Password (Google Account → Security → 2-Step Verification → App passwords — **not** the account password; Gmail rejects regular passwords with `BadCredentials`). When unset, emails are skipped with a warning and the app still works.
+- `MAIL_FROM` — the sender address; defaults to `EMAIL_USER`.
+- `SENDGRID_API_KEY` — legacy fallback, used only when no SMTP credentials are set.
 - `APP_URL` — public URL used in email links.
 - `NODE_ENV` — set to `production` when deploying over HTTPS.
 
@@ -149,14 +144,15 @@ There is no ESLint configuration in this repository; `npm run check` is the buil
 2. Set a strong `SESSION_SECRET` and `NODE_ENV=production`.
 3. Run behind HTTPS. Production cookies are marked `secure`, so login will not persist over plain HTTP.
 4. Set `APP_URL` to the public origin for email links.
-5. Configure SendGrid if you want welcome/reset email delivery; the app otherwise works without it.
+5. Set `EMAIL_USER` and `EMAIL_PASS` (Gmail App Password) if you want welcome/reset/order-confirmation email delivery; the app otherwise works without it.
 6. Start with `npm start`. Sessions and carts are stored in MongoDB, so the app is stateless apart from the database.
 
 ## Known limitations
 
 - This is a demonstration storefront: **no payment is collected and no shipping address is captured**. Orders are recorded in the account's history, which is clearly noted on the cart and help pages.
-- Product images are entered by URL; there is no upload pipeline or image transformation service.
-- Email delivery is optional and depends on SendGrid credentials.
+- Product images are uploaded by the admin from the browser (JPEG, PNG, WebP, AVIF, GIF · up to 5 MB each · up to 8 per product) and stored under `public/images/uploads/` (git-ignored). Products carry a `sizes` list for apparel-style items (e.g. the Linen Throw); buyers must pick one before adding to the cart, and it is kept in the cart, the order snapshot, and the confirmation email.
+- The seeded catalog photographs are sourced from Unsplash (free license) and committed under `public/images/products/`.
+- Email delivery is optional and depends on SMTP credentials (Gmail App Password, or the legacy SendGrid fallback).
 - The backend intentionally keeps its legacy Mongoose 5 driver to avoid rewriting the existing data layer; `npm install` reports audit advisories from that dependency tree. Treat a production deployment as an opportunity to plan a Mongoose/driver upgrade.
 - There is no rate limiting, background job queue, or multi-admin role system.
 - Very large catalogs would need pagination; the seeded catalog is intentionally small.

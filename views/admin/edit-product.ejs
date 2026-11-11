@@ -1,11 +1,12 @@
 <%
     const values = {
         title: form ? form.title : (product ? product.title : ''),
-        imageUrl: form ? form.imageUrl : (product ? product.imageUrl : ''),
         price: form ? form.price : (product ? product.price : ''),
-        description: form ? form.description : (product ? product.description : '')
+        description: form ? form.description : (product ? product.description : ''),
+        sizes: form ? (form.sizes || '') : (product && Array.isArray(product.sizes) ? product.sizes.join(', ') : '')
     };
-    const previewImage = values.imageUrl || '/images/placeholder.svg';
+    const currentImages = product && Array.isArray(product.images) ? product.images : [];
+    const previewImage = currentImages[0] || '/images/placeholder.svg';
 %>
 <%- include('../includes/head', { bodyClass: 'page-admin', pageStyles: ['/css/shop.css', '/css/admin.css'] }) %>
 
@@ -23,7 +24,7 @@
         </div>
     </header>
 
-    <form class="admin-form" action="/admin/<%= editing ? 'edit-product' : 'add-product' %>" method="POST" data-validate data-product-form novalidate>
+    <form class="admin-form" action="/admin/<%= editing ? 'edit-product' : 'add-product' %>?_csrf=<%= csrfToken %>" method="POST" enctype="multipart/form-data" data-validate data-product-form novalidate>
         <div class="admin-form__fields">
             <section class="form-section" aria-labelledby="details-heading">
                 <div class="form-section__header">
@@ -50,6 +51,12 @@
                         </div>
                         <p class="field-error" id="price-error"><%= validationErrors.price || 'Price must be a positive number.' %></p>
                     </div>
+
+                    <div class="form-field form-field--wide">
+                        <label for="sizes">Sizes <span class="form-label-inline">(optional — apparel only)</span></label>
+                        <input type="text" name="sizes" id="sizes" placeholder="e.g. S, M, L" value="<%= values.sizes %>" autocomplete="off" maxlength="120">
+                        <p class="form-hint">Comma-separated. When sizes are set, customers must pick one before the product can be added to the cart. Leave empty for everything else.</p>
+                    </div>
                 </div>
             </section>
 
@@ -57,19 +64,30 @@
                 <div class="form-section__header">
                     <span class="form-section__number" aria-hidden="true">02</span>
                     <div>
-                        <h2 id="media-heading">Product image</h2>
-                        <p>A portrait image works best — 4:5 or taller.</p>
+                        <h2 id="media-heading">Product images</h2>
+                        <p>Upload one or more. The first image becomes the storefront thumbnail.</p>
                     </div>
                 </div>
 
-                <div class="form-field <%= validationErrors.imageUrl ? 'is-invalid' : '' %>">
-                    <label for="imageUrl">Image URL</label>
-                    <div class="input-wrap">
-                        <span class="input-wrap__icon" aria-hidden="true"><%- icon('external-link') %></span>
-                        <input type="url" name="imageUrl" id="imageUrl" placeholder="https://example.com/your-object.jpg" value="<%= values.imageUrl %>" data-preview-image-input required <%= validationErrors.imageUrl ? 'aria-invalid="true" aria-describedby="image-error"' : '' %>>
+                <% if (currentImages.length > 0) { %>
+                    <div class="upload-grid" role="group" aria-label="Images currently on the product">
+                        <% currentImages.forEach(function (url, index) { %>
+                            <label class="upload-grid__item">
+                                <img src="<%= url %>" alt="Product image <%= index + 1 %><%= index === 0 ? ', storefront thumbnail' : '' %>" width="96" height="120" data-product-image>
+                                <span class="upload-grid__meta">
+                                    <% if (index === 0) { %><span class="badge badge--accent">Thumbnail</span><% } %>
+                                    <span class="upload-grid__remove"><input type="checkbox" name="removeImages" value="<%= url %>"> Remove</span>
+                                </span>
+                            </label>
+                        <% }); %>
                     </div>
-                    <p class="field-error" id="image-error"><%= validationErrors.imageUrl || 'Enter a hosted image URL or a path under /images/.' %></p>
-                    <p class="form-hint">Use a hosted image URL, or a local path such as /images/products/your-object.svg. The preview updates as you type.</p>
+                <% } %>
+
+                <div class="form-field <%= validationErrors.images ? 'is-invalid' : '' %>">
+                    <label for="images"><%= editing ? 'Add more images' : 'Images' %></label>
+                    <input type="file" name="images" id="images" accept="image/jpeg,image/png,image/webp,image/avif,image/gif" multiple data-preview-files <%= validationErrors.images ? 'aria-invalid="true" aria-describedby="images-error"' : '' %>>
+                    <p class="field-error" id="images-error"><%= validationErrors.images || 'Add at least one image.' %></p>
+                    <p class="form-hint">JPEG, PNG, WebP, AVIF or GIF · up to 5 MB per image · up to 8 images per product. New uploads appear after the current ones.</p>
                 </div>
             </section>
 
@@ -129,7 +147,7 @@
                         <span class="product-card__add-link">Add to cart <%- icon('plus') %></span>
                     </div>
                 </article>
-                <p class="preview-panel__note"><%- icon('info') %> This preview updates live. Saved changes appear on the storefront immediately.</p>
+                <p class="preview-panel__note"><%- icon('info') %> The preview updates live — title, price, description, and the first selected image. Saved changes appear on the storefront immediately.</p>
             </div>
         </aside>
     </form>

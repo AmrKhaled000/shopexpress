@@ -8,7 +8,8 @@ const userSchema = new Schema({
     required: true,
     unique: true,
     trim: true,
-    lowercase: true
+    lowercase: true,
+    maxlength: 254
   },
   password: {
     type: String,
@@ -18,6 +19,7 @@ const userSchema = new Schema({
     type: Boolean,
     default: false
   },
+  // Stored as a SHA-256 hash of the emailed token, never in plaintext.
   resetToken: String,
   resetTokenExpiration: Date,
   cart: {
@@ -28,17 +30,36 @@ const userSchema = new Schema({
           ref: 'Product',
           required: true
         },
-        quantity: { type: Number, required: true }
+        quantity: { type: Number, required: true, min: 1 },
+        // Empty string for products without apparel-style sizes.
+        size: { type: String, default: '', trim: true, maxlength: 20 }
       }
     ]
   }
-});
+}, { timestamps: true });
 
-userSchema.methods.addToCart = function(product, quantity = 1) {
+// Reset-token lookups happen against a sparse index so plain accounts stay out of it.
+userSchema.index({ resetToken: 1 }, { sparse: true });
+
+function normalizeSize(size) {
+  return String(size || '')
+    .trim()
+    .slice(0, 20);
+}
+
+function sameCartLine(item, productId, size) {
+  return (
+    item.productId.toString() === productId.toString() &&
+    normalizeSize(item.size) === normalizeSize(size)
+  );
+}
+
+userSchema.methods.addToCart = function(product, quantity = 1, size) {
   const amount =
     Number.isInteger(quantity) && quantity > 0 ? Math.min(quantity, 10) : 1;
+  const normalizedSize = normalizeSize(size);
   const cartProductIndex = this.cart.items.findIndex(cp => {
-    return cp.productId.toString() === product._id.toString();
+    return sameCartLine(cp, product._id, normalizedSize);
   });
   const updatedCartItems = [...this.cart.items];
 
@@ -50,7 +71,8 @@ userSchema.methods.addToCart = function(product, quantity = 1) {
   } else {
     updatedCartItems.push({
       productId: product._id,
-      quantity: Math.min(amount, 10)
+      quantity: Math.min(amount, 10),
+      size: normalizedSize
     });
   }
   this.cart = {
@@ -59,9 +81,10 @@ userSchema.methods.addToCart = function(product, quantity = 1) {
   return this.save();
 };
 
-userSchema.methods.updateCartQuantity = function(productId, delta) {
+userSchema.methods.updateCartQuantity = function(productId, delta, size) {
+  const normalizedSize = normalizeSize(size);
   const item = this.cart.items.find(cp => {
-    return cp.productId.toString() === productId.toString();
+    return sameCartLine(cp, productId, normalizedSize);
   });
 
   if (!item) {
@@ -71,7 +94,7 @@ userSchema.methods.updateCartQuantity = function(productId, delta) {
   const nextQuantity = item.quantity + delta;
   if (nextQuantity <= 0) {
     this.cart.items = this.cart.items.filter(cp => {
-      return cp.productId.toString() !== productId.toString();
+      return !sameCartLine(cp, productId, normalizedSize);
     });
   } else {
     item.quantity = Math.min(nextQuantity, 10);
@@ -80,9 +103,10 @@ userSchema.methods.updateCartQuantity = function(productId, delta) {
   return this.save();
 };
 
-userSchema.methods.removeFromCart = function(productId) {
+userSchema.methods.removeFromCart = function(productId, size) {
+  const normalizedSize = normalizeSize(size);
   const updatedCartItems = this.cart.items.filter(item => {
-    return item.productId.toString() !== productId.toString();
+    return !sameCartLine(item, productId, normalizedSize);
   });
   this.cart.items = updatedCartItems;
   return this.save();

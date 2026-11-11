@@ -5,6 +5,11 @@
     </div>
     <ul class="admin-nav__list">
         <li>
+            <a href="/admin/dashboard" class="<%= path === '/admin/dashboard' ? 'is-active' : '' %>" <%= path === '/admin/dashboard' ? 'aria-current="page"' : '' %>>
+                <%- icon('layout-dashboard') %> Dashboard
+            </a>
+        </li>
+        <li>
             <a href="/admin/products" class="<%= (path === '/admin/products' || path === '/admin/edit-product') ? 'is-active' : '' %>" <%= (path === '/admin/products' || path === '/admin/edit-product') ? 'aria-current="page"' : '' %>>
                 <%- icon('boxes') %> Catalog
             </a>

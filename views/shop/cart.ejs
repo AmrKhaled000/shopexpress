@@ -28,11 +28,12 @@
                             <div class="cart-item__body">
                                 <p class="cart-item__eyebrow">ShopExpress</p>
                                 <h3 class="cart-item__title"><a href="/products/<%= item.productId._id %>"><%= item.productId.title %></a></h3>
-                                <p class="cart-item__unit"><%= formatPrice(item.productId.price) %> each</p>
+                                <p class="cart-item__unit"><%= formatPrice(item.productId.price) %> each<% if (item.size) { %> · Size <%= item.size %><% } %></p>
                                 <div class="cart-item__controls">
                                     <form class="quantity-stepper" action="/cart-update-quantity" method="post">
                                         <input type="hidden" name="_csrf" value="<%= csrfToken %>">
                                         <input type="hidden" name="productId" value="<%= item.productId._id %>">
+                                        <input type="hidden" name="size" value="<%= item.size || '' %>">
                                         <button type="submit" name="delta" value="-1" aria-label="Decrease quantity of <%= item.productId.title %>" <%= item.quantity <= 1 ? 'disabled' : '' %>><%- icon('minus') %></button>
                                         <span class="quantity-stepper__value" aria-live="polite"><%= item.quantity %></span>
                                         <button type="submit" name="delta" value="1" aria-label="Increase quantity of <%= item.productId.title %>" <%= item.quantity >= 10 ? 'disabled' : '' %>><%- icon('plus') %></button>
@@ -40,6 +41,7 @@
                                     <form action="/cart-delete-item" method="post" data-confirm="Remove “<%= item.productId.title %>” from your cart?">
                                         <input type="hidden" name="_csrf" value="<%= csrfToken %>">
                                         <input type="hidden" name="productId" value="<%= item.productId._id %>">
+                                        <input type="hidden" name="size" value="<%= item.size || '' %>">
                                         <button class="cart-item__remove" type="submit"><%- icon('trash-2') %> Remove</button>
                                     </form>
                                 </div>

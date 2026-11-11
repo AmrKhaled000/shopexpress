@@ -53,7 +53,7 @@
                                 <img src="<%= item.product.imageUrl %>" alt="<%= item.product.title %>" width="64" height="80" loading="lazy" data-product-image>
                                 <div class="order-card__product-info">
                                     <strong><%= item.product.title %></strong>
-                                    <span><%= item.quantity %> × <%= formatPrice(item.product.price) %></span>
+                                    <span><%= item.quantity %> × <%= formatPrice(item.product.price) %><% if (item.product.size) { %> · Size <%= item.product.size %><% } %></span>
                                 </div>
                                 <span class="order-card__line-total"><%= formatPrice(Number(item.product.price) * item.quantity) %></span>
                             </li>

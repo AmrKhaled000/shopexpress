@@ -161,6 +161,10 @@ exports.postLogout = (req, res, next) => {
   });
 };
 
+function hashResetToken(token) {
+  return crypto.createHash('sha256').update(String(token || '')).digest('hex');
+}
+
 exports.getReset = (req, res, next) => {
   res.render('auth/reset', {
     path: '/reset',
@@ -191,7 +195,7 @@ exports.postReset = (req, res, next) => {
         if (!user) {
           return null;
         }
-        user.resetToken = token;
+        user.resetToken = hashResetToken(token);
         user.resetTokenExpiration = Date.now() + 3600000;
         return user.save();
       })
@@ -210,7 +214,7 @@ exports.postReset = (req, res, next) => {
 
 exports.getNewPassword = (req, res, next) => {
   const token = req.params.token;
-  User.findOne({ resetToken: token, resetTokenExpiration: { $gt: Date.now() } })
+  User.findOne({ resetToken: hashResetToken(token), resetTokenExpiration: { $gt: Date.now() } })
     .then(user => {
       if (!user) {
         req.flash('error', 'Password reset link is invalid or has expired.');
@@ -250,7 +254,7 @@ exports.postNewPassword = (req, res, next) => {
   }
 
   User.findOne({
-    resetToken: passwordToken,
+    resetToken: hashResetToken(passwordToken),
     resetTokenExpiration: { $gt: Date.now() },
     _id: userId
   })

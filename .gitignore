@@ -5,6 +5,10 @@ node_modules/
 .env
 .env.*
 !.env.example
+
+# User-uploaded product images
+public/images/uploads/*
+!public/images/uploads/.gitkeep
 *.pem
 *.key
 
